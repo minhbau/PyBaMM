@@ -1,0 +1,38 @@
+name: Debug wheel on macos
+
+on:
+  push:
+    branches: debug_mac
+
+jobs:
+  build-wheels:
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+       python-version: 3.7
+
+    - name: Install standard python dependencies
+      run: |
+        python -m pip install --upgrade pip wheel setuptools
+
+    - name: Install build-time deps for MacOS
+      run: |
+        brew update
+        brew install graphviz
+        brew install openblas
+        pip install wget
+        git clone https://github.com/pybind/pybind11.git
+        python scripts/setup_KLU_module_build.py
+
+    - name: Build wheels
+      run: |
+        python -m pip wheel . -w dist/ --no-deps
+
+    - name: Install binutils
+      run: brew install binutils
+
+    - name: Setup tmate session
+      uses: mxschmitt/action-tmate@v2
