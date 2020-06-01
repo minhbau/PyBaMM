@@ -91,7 +91,7 @@ suitesparse_url = (
     "https://github.com/DrTimothyAldenDavis/"
     + "SuiteSparse/archive/v{}.tar.gz".format(suitesparse_version)
 )
-download_extract_library(suitesparse_url, download_dir)
+# download_extract_library(suitesparse_url, download_dir)
 
 # The SuiteSparse KLU module has 4 dependencies:
 # - suitesparseconfig
@@ -114,15 +114,26 @@ for libdir in ["SuiteSparse_config", "AMD", "COLAMD", "BTF", "KLU"]:
     subprocess.run(make_cmd, cwd=build_dir)
     subprocess.run(install_cmd, cwd=build_dir)
 
-# 2 --- Download SUNDIALS
+# 2.1 --- Download SUNDIALS
 sundials_version = "5.1.0"
 sundials_url = (
     "https://computing.llnl.gov/"
     + "projects/sundials/download/sundials-{}.tar.gz".format(sundials_version)
 )
-download_extract_library(sundials_url, download_dir)
+# download_extract_library(sundials_url, download_dir)
 
-# Set install dir for SuiteSparse libs
+# 2.2 --- Tweak CMakeLists.txt for Sundials module
+klu_module_src_dir = os.path.join(
+    download_dir, "sundials-{}".format(sundials_version), "src", "sunlinsol", "klu",
+)
+# Replace all occurences of PUBLIC by PRIVATE
+f = open(os.path.join(klu_module_src_dir, "CMakeLists.txt"), "r+")
+newcontent = f.read().replace("PUBLIC", "PRIVATE")
+f.seek(0)
+f.write(newcontent)
+f.close()
+
+# 2.3 --- Set install dir for SuiteSparse libs
 # Ex: if install_dir -> "/usr/local/" then
 # KLU_INCLUDE_DIR -> "/usr/local/include"
 # KLU_LIBRARY_DIR -> "/usr/local/lib"
