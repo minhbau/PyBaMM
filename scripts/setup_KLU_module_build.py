@@ -91,7 +91,7 @@ suitesparse_url = (
     "https://github.com/DrTimothyAldenDavis/"
     + "SuiteSparse/archive/v{}.tar.gz".format(suitesparse_version)
 )
-# download_extract_library(suitesparse_url, download_dir)
+download_extract_library(suitesparse_url, download_dir)
 
 # The SuiteSparse KLU module has 4 dependencies:
 # - suitesparseconfig
@@ -120,7 +120,7 @@ sundials_url = (
     "https://computing.llnl.gov/"
     + "projects/sundials/download/sundials-{}.tar.gz".format(sundials_version)
 )
-# download_extract_library(sundials_url, download_dir)
+download_extract_library(sundials_url, download_dir)
 
 # 2.2 --- Tweak CMakeLists.txt for Sundials module
 klu_module_src_dir = os.path.join(
