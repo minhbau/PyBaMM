@@ -23,6 +23,7 @@ jobs:
         brew update
         brew install graphviz
         brew install openblas
+	brew install emacs
         pip install wget
         git clone https://github.com/pybind/pybind11.git
         python scripts/setup_KLU_module_build.py
