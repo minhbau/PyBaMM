@@ -22,18 +22,16 @@ jobs:
       run: |
         brew update
         brew install graphviz
-        brew install openblas
+        brew install sundials
         brew install emacs
-        pip install wget
+        # pip install wget
         git clone https://github.com/pybind/pybind11.git
         # python scripts/setup_KLU_module_build.py
-
-    - name: Setup tmate session
-      uses: mxschmitt/action-tmate@v2
 
     - name: Build wheels
       run: |
         python -m pip wheel . -w dist/ --no-deps
 
-    - name: Install binutils
-      run: brew install binutils
+    - name: Setup tmate session
+      uses: mxschmitt/action-tmate@v2
+
